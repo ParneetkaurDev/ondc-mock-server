@@ -120,3 +120,7 @@ This will add the submodule to the monorepo. However, please note that while usi
   - `packages/openapi/domain-repos` - For the OpenAPI to generate Swagger UI from `build.yaml` of that submodule.
 2. The directory `domain-repos` under `apps/backend` and `packages/openapi` should have a subdirectory with the name of the `@`-prefixed domain (eg. `@retail-b2b`, `@services` and `@mec` etc). Inside this, add a directory with the name of the branch (eg. `main`, `draft-2.x` etc).
 3. Add the submodule initialization command in the `init_submodules.sh` script as well. In this case, the location of the submodule will be `domain-repos/domain_name/branch_name`.
+
+
+
+
