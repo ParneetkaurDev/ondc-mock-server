@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SubscriberDetail } from "../../interfaces";
 import { prisma } from "./prisma";
-import { REGISTRY_URL } from "./constants";
+import { STAGING_REGISTRY_URL } from "./constants";
 import { Prisma } from "@prisma/client";
 
 export async function getSubscriberDetails(
@@ -30,7 +30,7 @@ export async function getSubscriberDetails(
 	// 	})
 	// );
 	if (subscribers.length === 0) {
-		const response = await axios.post(REGISTRY_URL, {
+		const response = await axios.post(STAGING_REGISTRY_URL, {
 			subscriber_id,
 			ukId: unique_key_id,
 		});
