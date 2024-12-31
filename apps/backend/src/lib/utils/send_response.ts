@@ -70,10 +70,9 @@ async function send_response(
     } else {
       uri = `${bpp_uri}/${action}${scenario ? `?scenario=${scenario}` : ""}`;
     }
-    console.log("ennv",env)
     try {
       const response = await axios.post(uri, res_obj, {
-        headers: { ...headers ,"Environment":env},
+        headers: { ...headers ,"environment":env},
       });
       await redis.set(
         `${transaction_id}-${action}-from-server-${id}-${time_now}`,

@@ -120,7 +120,7 @@ type CustomDrawerProps = {
 
 export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 	const { domain, setDomain } = useDomain();
-	const {Environment,setEnvironment} = useEnvironment();
+	const {environment,setEnvironment} = useEnvironment();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -134,7 +134,6 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 	const handleEnvironment = (event: SelectChangeEvent) => {
 		setEnvironment(event.target.value.toLowerCase());
 	};
-	console.log("Env",Environment)
 	const drawer = (
 		<div>
 			<Toolbar />
@@ -164,7 +163,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 				</Select>
 			</FormControl>
 			<FormControl fullWidth >
-			<InputLabel id="select-environment-label">{Environment ?  "" : "Select-Environment"}</InputLabel>
+			<InputLabel id="select-environment-label">{environment ?  "" : "Select-Environment"}</InputLabel>
 				<Select
 					labelId="select-environment-label"
 					label="Environment"
