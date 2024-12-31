@@ -164,7 +164,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 				</Select>
 			</FormControl>
 			<FormControl fullWidth >
-			<InputLabel id="select-environment-label">{Environment ? "" : "Select-Environment"}</InputLabel>
+			<InputLabel id="select-environment-label">{Environment ?  "" : "Select-Environment"}</InputLabel>
 				<Select
 					labelId="select-environment-label"
 					label="Environment"
