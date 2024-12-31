@@ -1,12 +1,13 @@
 import axios from "axios";
 import { SubscriberDetail } from "../../interfaces";
 import { prisma } from "./prisma";
-import { STAGING_REGISTRY_URL } from "./constants";
+import { PREPOD_REGISTRY_URL, STAGING_REGISTRY_URL } from "./constants";
 import { Prisma } from "@prisma/client";
 
 export async function getSubscriberDetails(
 	subscriber_id: string,
-	unique_key_id: string
+	unique_key_id: string,
+	env:string
 ) {
 	var subscribers = await prisma.user.findMany({
 		where: {
@@ -29,8 +30,10 @@ export async function getSubscriberDetails(
 	// 		unique_key_id,
 	// 	})
 	// );
+	const url=(env==="prepod") ? PREPOD_REGISTRY_URL : STAGING_REGISTRY_URL
+	console.log("urll",url)
 	if (subscribers.length === 0) {
-		const response = await axios.post(STAGING_REGISTRY_URL, {
+		const response = await axios.post(url, {
 			subscriber_id,
 			ukId: unique_key_id,
 		});

@@ -240,11 +240,12 @@ export const InitiateRequestSection = () => {
 			const response = await axios.post(
 				`${
 					import.meta.env.VITE_SERVER_URL
-				}/${domain}/initiate/${action}?mode=mock&version=${version}&scenario=${selectedScenario}&environment=${Environment}`,
+				}/${domain}/initiate/${action}?mode=mock&version=${version}&scenario=${selectedScenario}`,
 				formState,
 				{
 					headers: {
 						"Content-Type": "application/json",
+						"Environment":Environment
 					},
 				}
 			);
