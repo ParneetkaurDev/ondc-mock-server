@@ -4,20 +4,20 @@ type EnvironmentProviderType = {
 	children: React.ReactNode;
 };
 type EnvironmentContextType = {
-	Environment: string;
+	environment: string;
 	setEnvironment: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const EnvironmentContext = createContext<EnvironmentContextType>({
-	Environment: "",
+	environment: "",
 	setEnvironment: () => {},
 });
 
 export const EnvironmentProvider = ({ children }: EnvironmentProviderType) => {
-	const [Environment, setEnvironment] = useState("");
-	console.log("Environment",Environment)
+	const [environment, setEnvironment] = useState("");
+	console.log("Environment",environment)
 	return (
-		<EnvironmentContext.Provider value={{ Environment, setEnvironment }}>
+		<EnvironmentContext.Provider value={{ environment, setEnvironment }}>
 			{children}
 		</EnvironmentContext.Provider>
 	);

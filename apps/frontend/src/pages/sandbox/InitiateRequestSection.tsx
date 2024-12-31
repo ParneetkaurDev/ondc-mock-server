@@ -62,7 +62,7 @@ export const InitiateRequestSection = () => {
 	const { handleMessageToggle, setMessageType, setCopy } = useMessage();
 	const [action, setAction] = useState<string>();
 	const { domain } = useDomain();
-	const { Environment } = useEnvironment();
+	const { environment } = useEnvironment();
 	const [domainOptions, setDomainOptions] = useState<string[]>([]);
 	const [, setScenarioOptions] = useState<string[]>([]);
 	const [cityOptions, setCityOptions] = useState<string[]>([]);
@@ -245,7 +245,7 @@ export const InitiateRequestSection = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						"Environment":Environment
+						"Environment":environment
 					},
 				}
 			);
