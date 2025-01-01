@@ -1,6 +1,6 @@
-.github
+# .github
 node_modules
-
+docker-compose.yml
 .env
 
 dev.db*

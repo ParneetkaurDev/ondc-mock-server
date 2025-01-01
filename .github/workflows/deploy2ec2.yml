@@ -1,0 +1,77 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'Deploy 2 EC2'
+        type: choice
+        options:
+          - Deploy 2 EC2
+
+env:
+  ENVIRONMENT: 'Deploy 2 EC2'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            # Remove existing directory
+            if [[ -d "/home/devloper/ondc-mock-server" ]]; then
+              docker-compose -f /home/devloper/ondc-mock-server/docker-compose.yml down
+              rm -rf /home/devloper/ondc-mock-server
+            fi
+
+            # Fresh clone
+            git clone https://github.com/abhik-wil/ondc-mock-server-backend.git /home/devloper/ondc-mock-server
+            cd /home/devloper/ondc-mock-server
+            
+            # Rename docker compose file
+            mv docker-compose.dev.yml docker-compose.yml
+            
+            # Create backend .env file
+            cat > .env << EOL
+            PORT=${{ secrets.PORT }}
+            REDIS_PORT=${{ secrets.REDIS_PORT }}
+            REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+            REDIS_HOST=${{ secrets.REDIS_HOST }}
+            SANDBOX_MODE=${{ secrets.SANDBOX_MODE }}
+            RATE_LIMIT_MODE=${{ secrets.RATE_LIMIT_MODE }}
+            RATE_LIMIT_24HR=${{ secrets.RATE_LIMIT_24HR }}
+            PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
+            UNIQUE_KEY=${{ secrets.UNIQUE_KEY }}
+            SUBSCRIBER_ID=${{ secrets.SUBSCRIBER_ID }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}
+            
+            VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
+            MOCKSERVER_ID=${{ secrets.MOCKSERVER_ID }}
+            EOL
+
+            cat .env
+            
+            echo "HERE"
+            
+            # Build and deploy
+            sudo docker-compose up -d --build
+
+            echo "BUILT"
+            # Cleanup
+            sudo docker builder prune -af

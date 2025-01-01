@@ -2,13 +2,11 @@ services:
   
   redis:
     env_file:
-      - ./apps/backend/.env
+      - ./.env
     image: redis:7
     ports:
       - "6379:6379"
     command: /bin/sh -c "redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
-    # environment:
-    #   - REDIS_PASSWORD=${REDIS_PASS}
     networks:
       - ondc
 
@@ -16,20 +14,10 @@ services:
     build: 
       context: .
       dockerfile: ./apps/backend/Dockerfile.backend
-    # extends: base
     ports:
       - "3000:3000"
     env_file:
-      - ./apps/backend/.env
-
-    # environment:
-    #   - PORT
-    #   - RATE_LIMIT_MODE=${RATE_LIMIT_MODE}
-    #   - RATE_LIMIT_24HR=${RATE_LIMIT_24HR}
-    #   - PRIVATE_KEY=${PRIVATE_KEY}
-    #   - UNIQUE_KEY=${UNIQUE_KEY}
-    #   - SUBSCRIBER_ID=${SUBSCRIBER_ID}
-    #   - DATABASE_URL=${DATABASE_URL}
+      - ./.env
     restart: always
     depends_on:
       - redis
@@ -41,11 +29,7 @@ services:
       context: .
       dockerfile: ./apps/frontend/Dockerfile.frontend
     env_file:
-      - ./apps/frontend/.env
-    # environment:
-    #   - VITE_SERVER_URL=${VITE_SERVER_URL}
-    #   - MOCKSERVER_ID=${MOCKSERVER_ID}
-    #   - NODE_OPTIONS=${NODE_OPTIONS}
+      - ./.env
     ports:
       - "8080:80"
     restart: always
