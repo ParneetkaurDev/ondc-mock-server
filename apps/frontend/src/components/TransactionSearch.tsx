@@ -12,6 +12,7 @@ import * as _ from "lodash";
 import { useAnalyse, useMessage } from "../utils/hooks";
 import { useState } from "react";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { VITE_SERVER_URL } from "../utils/env";
 
 export const TransactionSearch = () => {
 	const theme = useTheme();
@@ -21,9 +22,10 @@ export const TransactionSearch = () => {
 	const [transactionId, setTransactionId] = useState("");
 
 	const fetchTransaction = async (transaction: string) => {
+		console.log('API URL:', VITE_SERVER_URL);
 		try {
 			const response = await axios.get(
-				`${import.meta.env.VITE_SERVER_URL}/analyse/${transaction}`
+				`${VITE_SERVER_URL}/analyse/${transaction}`
 			);
 			const formattedResponse = response.data
         .reduce(

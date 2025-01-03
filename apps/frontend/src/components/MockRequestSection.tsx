@@ -18,6 +18,7 @@ import { useAction, useDomain, useMock } from "../utils/hooks";
 import { URL_MAPPING } from "../utils";
 import axios, { AxiosError } from "axios";
 import { UserGuide } from "./UserGuideSection";
+import { VITE_SERVER_URL } from "../utils/env";
 
 // type MockRequestSectionProp = {
 // 	domain: string;
@@ -33,13 +34,14 @@ export const MockRequestSection = () => {
 
 	const { domain } = useDomain();
 	const [version, setVersion] = useState("");
-	const { action, detectAction, logError, scenarios,setLogError } = useAction();
+	const { action, detectAction, logError, scenarios, setLogError } =
+		useAction();
 	const { setAsyncResponse, setSyncResponse } = useMock();
 
-	useEffect(()=>{
-    setLog("")
-    setLogError(false)
-  },[domain])
+	useEffect(() => {
+		setLog("");
+		setLogError(false);
+	}, [domain]);
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
@@ -53,10 +55,14 @@ export const MockRequestSection = () => {
 	const [curl, setCurl] = useState<string>();
 
 	const handleVersion = (
-		event: React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FocusEvent<Element> | null,
+		event:
+			| React.MouseEvent<Element>
+			| React.KeyboardEvent<Element>
+			| React.FocusEvent<Element>
+			| null,
 		value: {} | null
 	) => {
-		console.log("event",event)
+		console.log("event", event);
 		if (value) {
 			setVersion(value as string); // Ensure value is a string and set the version
 		}
@@ -64,13 +70,13 @@ export const MockRequestSection = () => {
 
 	const handleLogChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setLog(e.target.value);
-		detectAction(e.target.value,version);
+		detectAction(e.target.value, version);
 	};
 
 	const handleSubmit = async () => {
-		let url = `${[
-			import.meta.env.VITE_SERVER_URL,
-		]}/${domain.toLowerCase()}/${Object.keys(URL_MAPPING).filter((key) =>
+		let url = `${
+			VITE_SERVER_URL
+		}/${domain.toLowerCase()}/${Object.keys(URL_MAPPING).filter((key) =>
 			URL_MAPPING[key as keyof typeof URL_MAPPING].includes(action as string)
 		)}/${action}?mode=mock&version=${version}`;
 		if (activeScenario?.scenario)
@@ -86,10 +92,10 @@ export const MockRequestSection = () => {
 			const response = await axios.post(url, JSON.parse(log as string), {
 				headers: {
 					"Content-Type": "application/json",
-					"mode": "mock"
+					mode: "mock",
 				},
 			});
-			
+
 			setSyncResponse(response.data.sync);
 			setAsyncResponse(response.data.async || {});
 		} catch (error) {
@@ -111,7 +117,11 @@ export const MockRequestSection = () => {
 					<Stack spacing={2} justifyContent="center" alignItems="center">
 						<Typography variant="h5">Mock Server</Typography>
 						{domain === "retail" && (
-							<Select placeholder="Select a version" sx={{ width: "100%" }} onChange={handleVersion}>
+							<Select
+								placeholder="Select a version"
+								sx={{ width: "100%" }}
+								onChange={handleVersion}
+							>
 								<Option value="b2b">B2B</Option>
 								<Option value="b2c">B2C</Option>
 							</Select>

@@ -19,6 +19,7 @@ import { useAction, useDomain, useSandbox } from "../utils/hooks";
 import { URL_MAPPING } from "../utils";
 import axios, { AxiosError } from "axios";
 import { UserGuide } from "./UserGuideSection";
+import { VITE_SERVER_URL } from "../utils/env";
 
 export const SandboxRequestSection = () => {
 	const [authHeader, setAuthHeader] = useState<string>();
@@ -54,20 +55,23 @@ export const SandboxRequestSection = () => {
 	};
 
 	const handleVersion = (
-		event: React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FocusEvent<Element> | null,
+		event:
+			| React.MouseEvent<Element>
+			| React.KeyboardEvent<Element>
+			| React.FocusEvent<Element>
+			| null,
 		value: {} | null
 	) => {
-		console.log("event",event)
+		console.log("event", event);
 		if (value) {
 			setVersion(value as string); // Ensure value is a string and set the version
 		}
 	};
-	
 
 	const handleSubmit = async () => {
-		let url = `${[
-			import.meta.env.VITE_SERVER_URL,
-		]}/${domain.toLowerCase()}/${Object.keys(URL_MAPPING).filter((key) =>
+		let url = `${
+			VITE_SERVER_URL
+		}/${domain.toLowerCase()}/${Object.keys(URL_MAPPING).filter((key) =>
 			URL_MAPPING[key as keyof typeof URL_MAPPING].includes(action as string)
 		)}/${action}?mode=sandbox&version=${version}`;
 
