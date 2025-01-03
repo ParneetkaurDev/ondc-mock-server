@@ -60,6 +60,7 @@ jobs:
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}
+            MOCK_API_BASE_URL=${{ secrets.MOCK_API_BASE_URL }}
             
             VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
             MOCKSERVER_ID=${{ secrets.MOCKSERVER_ID }}
