@@ -122,7 +122,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 	const { domain, setDomain } = useDomain();
 	const {environment,setEnvironment} = useEnvironment();
 	const theme = useTheme();
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [mobileOpen, setMobileOpen] = React.useState(true);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 	const handleDrawerToggle = () => {
@@ -135,7 +135,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 		setEnvironment(event.target.value.toLowerCase());
 	};
 	const drawer = (
-		<div>
+		<div  >
 			<Toolbar />
 			<Divider />
 			<NavButton
@@ -236,9 +236,9 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 
 	return (
 		<Box sx={{ display: "flex" }}>
-			<AppBar component="nav">
+			<AppBar component="nav" sx={{width:"100vw"}}>
 				<Toolbar>
-					<IconButton
+					{/* <IconButton
 						color="inherit"
 						aria-label="open drawer"
 						edge="start"
@@ -246,7 +246,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 						sx={{ mr: 2 }}
 					>
 						<MenuIcon />
-					</IconButton>
+					</IconButton> */}
 					<Typography
 						variant="h6"
 						component="div"
@@ -256,9 +256,9 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<Box component="nav">
+			<Box component="nav" sx={{display:"flex",position:"static"}} > 
 				<Drawer
-					variant="temporary"
+					variant="permanent"
 					open={mobileOpen}
 					onClose={handleDrawerToggle}
 					ModalProps={{
@@ -266,6 +266,8 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 					}}
 					PaperProps={{
 						sx: {
+							// backgroundColor:"green",
+							height:"90%",		
 							// backgroundColor: theme.palette.primary.dark,
 							// color: theme.palette.primary.contrastText,
 						},
@@ -274,20 +276,23 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 						"& .MuiDrawer-paper": {
 							boxSizing: "border-box",
 							width: drawerWidth,
+							height:"95%",
+							position:"static",
+							top:"65px"
 						},
 					}}
 				>
-					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-						<IconButton
+					{/* <Box sx={{ display: "flex", justifyContent: "flex-end",height:"10%" }}>
+						{/* <IconButton
 							// sx={{ color: theme.palette.primary.contrastText }}
 							onClick={handleDrawerToggle}
 						>
 							<MenuOpenIcon />
-						</IconButton>
-					</Box>
-					{drawer}
-				</Drawer>
-			</Box>
+						</IconButton>  */}
+					{/* </Box> */} 
+					{drawer} 
+				</Drawer> 
+			</Box> 
 			<Box
 				component="main"
 				sx={{

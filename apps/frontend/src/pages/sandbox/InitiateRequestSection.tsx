@@ -368,6 +368,7 @@ export const InitiateRequestSection = () => {
 				>
 					<Typography variant="h6" my={1} mr={2}>
 						Initiate Request:
+						<Typography variant="h6" sx={{ fontSize: '0.8rem' }} my={1} mr={2}>if you are a seller and want to test Seller (BPP)</Typography>
 					</Typography>
 					<Tooltip title="Are you a seller app, Initiate Requests here 👇">
 						<IconButton>
