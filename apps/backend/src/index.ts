@@ -26,6 +26,7 @@ import {
 import { retailRouter } from "./controllers/retail";
 import { sendUpsolicieatedOnStatus } from "./lib/utils/sendUpsolicieatedOnStatus";
 import { loadConfig } from "./lib/utils";
+import 'dotenv/config'
 
 
 export const app: Express = express();
