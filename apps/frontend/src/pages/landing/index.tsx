@@ -19,7 +19,7 @@ export const Landing = () => {
 
 	return (
 		<>
-			<BackgroundContainer style={{ position: "fixed", right: 0, width: "90%", height: "100vh",backgroundColor:"red" }}>
+			<BackgroundContainer style={{ position: "fixed", right: 0, width: "90%", height: "100vh" }}>
 				<Container
 					style={{
 						display: "flex",
