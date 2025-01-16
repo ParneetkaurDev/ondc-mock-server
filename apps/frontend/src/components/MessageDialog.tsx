@@ -10,6 +10,7 @@ import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import WarningTwoToneIcon from "@mui/icons-material/WarningTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { Link } from "react-router-dom";
 
 export const MessageDialog = () => {
 	const { showDialog, closeDialog, message, messageType, copy } = useMessage();
@@ -53,6 +54,11 @@ export const MessageDialog = () => {
 				)}
 			</DialogContent>
 			<DialogActions>
+				<Link to="/analyse">
+			<Button variant="contained" color="secondary" sx={{ fontSize: '0.8rem' }} >
+					View in Transaction Analyser
+				</Button>
+				</Link>
 				<Button variant="contained" color="secondary" onClick={closeDialog}>
 					Close
 				</Button>

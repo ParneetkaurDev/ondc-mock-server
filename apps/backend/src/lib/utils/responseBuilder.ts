@@ -187,6 +187,9 @@ export const responseBuilder = async (
 			}
 
 			try {
+				if(uri.endsWith("/")){
+					uri=uri.substring(0,uri.length-1)
+				  }
 				console.log("URI BEING SENT :::", uri);
 				const response = await axios.post(`${uri}?mode=mock`, async, {
 					headers: {
@@ -738,7 +741,6 @@ export const quoteCreatorAgri = (items: Item[], providersItems?: any) => {
 		ttl: "P1D",
 	};
 
-	// console.log("resultttttttttt", JSON.stringify(result));
 	return result;
 };
 
@@ -746,7 +748,7 @@ function ensureArray(item:any) {
 	return Array.isArray(item) ? item : [item];
 }
 
-export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any) => {
+export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any,scenario?:string) => {
 	 console.log("itemssssssssssss", items, JSON.stringify(providersItems));
 	 if(!Array.isArray(items)){
 		items=ensureArray(items)
@@ -813,9 +815,15 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any) => {
 		breakup = [
 			{
 				title:item.title,
-				price:item.price,
+				price:{
+					currency: "INR",
+					value: (
+						Number(item?.price?.value) * item?.quantity?.selected?.count
+					).toString(),
+				},
 				item:{
 					id:item.id,
+					price:item.price,
 					quantity:{
 						selected:{
 							count:100
@@ -946,10 +954,17 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any) => {
 	let totalPrice = 0;
 	breakup.forEach((entry) => {
 		console.log("entryyy",entry)
-		const priceValue = parseFloat(entry.price.value);
-		if (!isNaN(priceValue)) {
-			totalPrice += priceValue;
-		}
+		if(entry.title==="discount"){
+			const priceValue = parseFloat(entry.price.value);
+			if (!isNaN(priceValue)) {
+				totalPrice -= priceValue;
+			}
+		 }
+		 else{
+		 const priceValue = parseFloat(entry.price.value);
+		 if (!isNaN(priceValue)) {
+			 totalPrice += priceValue;
+		 }}
 	});
 	// chargesOnFulfillment.forEach((entry) => {
 	// 	const priceValue = parseFloat(entry.price.value);
@@ -977,41 +992,9 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any) => {
 
 export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?: any) => {
 	console.log("itemssssssssssss", items, JSON.stringify(providersItems));
-	// if(!Array.isArray(items)){
-	//  items=ensureArray(items)
-	// }
 		const providersItem=[providersItems[0].items[0]]
  //get price from on_search
  let breakup: any[] = [];
- // const chargesOnFulfillment = [
- // 	{
- // 		"@ondc/org/item_id": "5009-Delivery",
- // 		"@ondc/org/title_type": "delivery",
- // 		price: {
- // 			currency: "INR",
- // 			value: "10",
- // 		},
- // 		title: "Delivery charges",
- // 	},
- // 	{
- // 		"@ondc/org/item_id": "5009-Delivery",
- // 		"@ondc/org/title_type": "packing",
- // 		price: {
- // 			currency: "INR",
- // 			value: "0",
- // 		},
- // 		title: "Packing charges",
- // 	},
- // 	{
- // 		"@ondc/org/item_id": "5009-Delivery",
- // 		"@ondc/org/title_type": "misc",
- // 		price: {
- // 			currency: "INR",
- // 			value: "0",
- // 		},
- // 		title: "Convenience Fee",
- // 	},
- // ];
 
  // console.log("itemssssssssssssEachhhhhhhhhhhh", items);
  items.forEach((item) => {
@@ -1050,6 +1033,7 @@ export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?
 			},
 			 item:{
 				 id:item.id,
+				 price:item.price,
 				 quantity:item?.quantity
 			 },
 			 tags: [
@@ -1070,31 +1054,6 @@ export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?
 		 }
 	 ];
  });
-//  breakup.push(          {
-// 	 "title": "earnest_money_deposit",
-// 	 "price": {
-// 		 "currency": "INR",
-// 		 "value": "5000.00"
-// 	 },
-// 	 "item": {
-// 		 "id": "I1"
-// 	 },
-// 	 "tags": [
-// 		 {
-// 			 "descriptor": {
-// 				 "code": "TITLE"
-// 			 },
-// 			 "list": [
-// 				 {
-// 					 "descriptor": {
-// 						 "code": "type"
-// 					 },
-// 					 "value": "earnest_money_deposit"
-// 				 }
-// 			 ]
-// 		 }
-// 	 ]
-//  })
  breakup.push({
 	 "title": "tax",
 	 "price": {

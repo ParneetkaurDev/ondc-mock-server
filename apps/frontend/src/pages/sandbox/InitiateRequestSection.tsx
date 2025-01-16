@@ -78,6 +78,7 @@ export const InitiateRequestSection = () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [matchingItems, setMatchingItems] = useState<any[]>([]);
 	const [selectedItemId, setSelectedItemId] = useState<string>("");
+	const [choice,setchoice]=useState<string>("agri")
 
 	useEffect(() => {
 		// setRenderActionFields(true);
@@ -171,6 +172,15 @@ export const InitiateRequestSection = () => {
 	};
 	useEffect(() => {
 		if (action) {
+			if (domain==="agri" && formState.domain){
+				if(formState.domain==="ONDC:AGR11"){
+					setchoice("agrioutput")
+				}
+				else{
+					setchoice("agri")
+				}
+				
+			}
 			const keys = Object.keys(formState || {});
 			const formKeys = INITIATE_FIELDS[
 				action as keyof typeof INITIATE_FIELDS
@@ -200,6 +210,7 @@ export const InitiateRequestSection = () => {
 			) {
 				setAllowSubmission(true);
 			} else if (checker(keys, formKeys, domain, version)) {
+				console.log("heerr1")
 				setAllowSubmission(true);
 			} else if (
 				checker(
@@ -210,6 +221,7 @@ export const InitiateRequestSection = () => {
 				scenarios?.domainDepended &&
 				!scenarios.options[domain as keyof SELECT_OPTIONS]
 			) {
+				console.log("heerr2")
 				setAllowSubmission(true);
 			} else {
 				setAllowSubmission(false);
@@ -366,9 +378,11 @@ export const InitiateRequestSection = () => {
 						alignItems: "center",
 					}}
 				>
-					<Typography variant="h6" my={1} mr={2}>
+					<Typography variant="h5" my={1} mr={2}>
 						Initiate Request:
+						<Typography variant="h6" sx={{ fontSize: '0.8rem' }} my={1} mr={2}>if you are a seller and want to test Seller (BPP)</Typography>
 					</Typography>
+				
 					<Tooltip title="Are you a seller app, Initiate Requests here 👇">
 						<IconButton>
 							<HelpOutlineTwoToneIcon />
@@ -486,6 +500,43 @@ export const InitiateRequestSection = () => {
 															console.log("options", options);
 															// Special case for scenario field
 															if (field.name === "scenario") {
+
+																if(domain==="agri" && options && choice in options &&
+																	Array.isArray(options[choice]) &&
+																	options[choice].length > 0 ){
+																		console.log("choice",choice,options[choice]);
+																		
+																		return (
+																			//   version ==="b2c" && domain==="retail"? (<></>) :
+																			<Select
+																				placeholder={field.placeholder}
+																				onChange={(
+																					_event: React.SyntheticEvent | null,
+																					newValue: string | null
+																				) =>
+																					handleFieldChange(
+																						field.name,
+																						newValue as string
+																					)
+																				}
+																			>
+																				{options[choice].map(
+																					(
+																						option: string,
+																						optionIndex: number
+																					) => (
+																						<Option
+																							value={option}
+																							key={`${option}-${optionIndex}`}
+																						>
+																							{option}
+																						</Option>
+																					)
+																				)}
+																			</Select>
+																		);
+																	}
+
 																if (
 																	options &&
 																	domain in options &&
@@ -579,7 +630,21 @@ export const InitiateRequestSection = () => {
 																					)
 																				)}
 																			</>
-																		) : (
+																		) : field.name === "update_target" && domain==="agri" && choice==="agrioutput" ?
+																		options[choice].map(
+																			(
+																				option: string,
+																				optionIndex: number
+																			) => (
+																				<Option
+																					value={option}
+																					key={`${option}-${optionIndex}`}
+																				>
+																					{option}
+																				</Option>
+																			)
+																		)
+																 : (
 																			options[domain].map(
 																				(
 																					option: string,

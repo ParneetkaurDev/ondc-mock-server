@@ -75,7 +75,7 @@ export const analyseController = async (req: Request, res: Response) => {
 			for (const action in grouped) {
 				
 			  const group = grouped[action];
-			  if (action === 'on_status') {
+			  if (action === 'on_status'||'init'||'on_init') {
 				// Keep all sorted objects for on_status
 				const withResponse = group.filter((obj:any) => obj.response);
 				prioritized.push(...withResponse);

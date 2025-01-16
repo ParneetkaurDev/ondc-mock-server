@@ -37,10 +37,10 @@ export const cancelController = async (
 		);
 
 		const item_measure_ids =
-			on_search_data.message.catalog['bpp/providers'][0].items.reduce(
+			on_search_data.message.catalog['providers'][0].items.reduce(
 				(accumulator: any, currentItem: any) => {
 					accumulator[currentItem.id] = currentItem.quantity
-						? currentItem.quantity.unitized.measure
+						? currentItem.quantity.available.measure
 						: undefined;
 					return accumulator;
 				},
@@ -101,7 +101,7 @@ const cancelRequest = async (
 				// 		(tag: any) => tag.descriptor.code !== "Settlement_Counterparty"
 				// 	),
 				// })),
-				payments:transaction.message.order.payment,
+				payments:transaction.message.order.payments,
 				updated_at: new Date().toISOString(),
 			},
 		};

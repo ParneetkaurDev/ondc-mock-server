@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import {
-    AGRI_EXAMPLES_PATH,
+	AGRI_EXAMPLES_PATH,
+	AGRI_OUTPUT_EXAMPLES_PATH,
 	quoteCreatorHealthCareService,
 	quoteCreatorService,
 	redisFetchToServer,
@@ -27,7 +28,7 @@ export const updateController = async (
 ) => {
 	try {
 		let { scenario } = req.query;
-		scenario=scenario?scenario:"reject"
+		scenario = scenario ? scenario : "reject"
 
 		const on_confirm = await redisFetchToServer(
 			ON_ACTION_KEY.ON_CONFIRM,
@@ -46,8 +47,14 @@ export const updateController = async (
 			return send_nack(res, ERROR_MESSAGES.ON_SEARCH_DOES_NOT_EXISTED);
 		}
 
-		const providersItems = on_search?.message?.catalog?.['bpp/providers'][0];
-		req.body.providersItems = providersItems;
+		if(req.body.context.domain===SERVICES_DOMAINS.AGRI_INPUT){
+			const providersItems = on_search?.message?.catalog["bpp/providers"][0]?.items;
+			req.body.providersItems = providersItems;
+		}
+		else{
+			const providersItems = on_search?.message?.catalog?.providers;
+			req.body.providersItems = providersItems;
+		}
 
 		//UPDATE FULFILLMENTS HERE BECAUSE It IS SAME FOR ALL SACENRIOS
 		const updatedFulfillments = updateFulfillments(
@@ -56,13 +63,19 @@ export const updateController = async (
 		);
 		req.body.message.order.fulfillments = updatedFulfillments;
 		req.body.on_confirm = on_confirm;
-		console.log("scenario",scenario)
+		console.log("scenario", scenario)
 		switch (scenario) {
 			case "liquidate":
 				updateliquidateController(req, res, next);
 				break;
 			case "reject":
 				updateRejectController(req, res, next);
+				break;
+			case "re-negotiate":
+				updaterenogtiateController(req, res, next);
+				break;
+			case "increase-bid-price":
+				updateincreasebidController(req, res, next);
 				break;
 			default:
 				updateRequoteController(req, res, next);
@@ -89,22 +102,21 @@ export const updateRequoteController = (
 			)
 		);
 		const response = YAML.parse(file.toString());
-		
+
 		const responseMessages = {
 			order: {
-				...response.value.message.order			
+				...response.value.message.order
 			},
 		};
-		console.log("responseatUpdateBpp",JSON.stringify(responseMessages))
+		console.log("responseatUpdateBpp", JSON.stringify(responseMessages))
 		return responseBuilder(
 			res,
 			next,
 			context,
 			responseMessages,
-			`${req.body.context.bap_uri}${
-				req.body.context.bap_uri.endsWith("/")
-					? ON_ACTION_KEY.ON_UPDATE
-					: `/${ON_ACTION_KEY.ON_UPDATE}`
+			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+				? ON_ACTION_KEY.ON_UPDATE
+				: `/${ON_ACTION_KEY.ON_UPDATE}`
 			}`,
 			`${ON_ACTION_KEY.ON_UPDATE}`,
 			"agri"
@@ -130,22 +142,21 @@ export const updateRejectController = (
 			)
 		);
 		const response = YAML.parse(file.toString());
-		console.log("on_confirmmm",on_confirm)
+		console.log("on_confirmmm", on_confirm)
 		const responseMessages = {
 			order: {
-				...response.value.message.order,	
+				...response.value.message.order,
 			},
 		};
-		console.log("responseatUpdateBpp",JSON.stringify(responseMessages))
+		console.log("responseatUpdateBpp", JSON.stringify(responseMessages))
 		return responseBuilder(
 			res,
 			next,
 			context,
 			responseMessages,
-			`${req.body.context.bap_uri}${
-				req.body.context.bap_uri.endsWith("/")
-					? ON_ACTION_KEY.ON_UPDATE
-					: `/${ON_ACTION_KEY.ON_UPDATE}`
+			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+				? ON_ACTION_KEY.ON_UPDATE
+				: `/${ON_ACTION_KEY.ON_UPDATE}`
 			}`,
 			`${ON_ACTION_KEY.ON_UPDATE}`,
 			"agri"
@@ -170,22 +181,21 @@ export const updateliquidateController = (
 			)
 		);
 		const response = YAML.parse(file.toString());
-		
+
 		const responseMessages = {
 			order: {
-				...response.value.message.order			
+				...response.value.message.order
 			},
 		};
-		console.log("responseatUpdateBpp",JSON.stringify(responseMessages))
+		console.log("responseatUpdateBpp", JSON.stringify(responseMessages))
 		return responseBuilder(
 			res,
 			next,
 			context,
 			responseMessages,
-			`${req.body.context.bap_uri}${
-				req.body.context.bap_uri.endsWith("/")
-					? ON_ACTION_KEY.ON_UPDATE
-					: `/${ON_ACTION_KEY.ON_UPDATE}`
+			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+				? ON_ACTION_KEY.ON_UPDATE
+				: `/${ON_ACTION_KEY.ON_UPDATE}`
 			}`,
 			`${ON_ACTION_KEY.ON_UPDATE}`,
 			"agri"
@@ -195,3 +205,83 @@ export const updateliquidateController = (
 	}
 
 };
+
+export const updaterenogtiateController = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const { context, message, on_confirm } = req.body;
+		//CREATED COMMON RESPONSE MESSAGE FOR ALL SCENRIO AND UPDATE ACCORDENGLY IN FUNCTIONS
+		const file = fs.readFileSync(
+			path.join(
+				AGRI_OUTPUT_EXAMPLES_PATH,
+				"on_update/on_update_requote_lower.yaml"
+			)
+		);
+		const response = YAML.parse(file.toString());
+
+		const responseMessages = {
+			order: {
+				...response.value.message.order
+			},
+		};
+		console.log("responseatUpdateBpp", JSON.stringify(responseMessages))
+		return responseBuilder(
+			res,
+			next,
+			context,
+			responseMessages,
+			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+				? ON_ACTION_KEY.ON_UPDATE
+				: `/${ON_ACTION_KEY.ON_UPDATE}`
+			}`,
+			`${ON_ACTION_KEY.ON_UPDATE}`,
+			"agri"
+		);
+	} catch (error) {
+		next(error);
+	}
+
+};
+
+export const updateincreasebidController=(
+	req: Request,
+	res: Response,
+	next: NextFunction
+)=>{
+	try{
+	const { context, message, on_confirm } = req.body;
+	//CREATED COMMON RESPONSE MESSAGE FOR ALL SCENRIO AND UPDATE ACCORDENGLY IN FUNCTIONS
+	const file = fs.readFileSync(
+		path.join(
+			AGRI_OUTPUT_EXAMPLES_PATH,
+			"on_update/on_update_requote_lower.yaml"
+		)
+	);
+	const response = YAML.parse(file.toString());
+
+	const responseMessages = {
+		order: {
+			...response.value.message.order
+		},
+	};
+	// console.log("responseatUpdateBpp", JSON.stringify(responseMessages))
+	return responseBuilder(
+		res,
+		next,
+		context,
+		responseMessages,
+		`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+			? ON_ACTION_KEY.ON_UPDATE
+			: `/${ON_ACTION_KEY.ON_UPDATE}`
+		}`,
+		`${ON_ACTION_KEY.ON_UPDATE}`,
+		"agri"
+	);
+} catch (error) {
+	next(error);
+}
+
+}

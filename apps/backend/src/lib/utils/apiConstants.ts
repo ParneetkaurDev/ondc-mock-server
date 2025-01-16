@@ -15,7 +15,7 @@ export const SERVICES_DOMAINS = {
 	SUBSCRIPTION_PRINT_MEDIA:"ONDC:MEC10",
 	SUBSCRIPTION_AUDIO_VIDEO: "ONDC:MEC11",
 	AGRI_INPUT:"ONDC:AGR10",
-	AGRI_OUTPUT:"ONDC:AGRI11",
+	AGRI_OUTPUT:"ONDC:AGR11",
 	ASTRO_SERVICE:"ONDC:SRV16"
 };
 
@@ -103,6 +103,26 @@ export const AGRI_STATUS=[
 	"Order_Picked_Up",
 	"Out_For_Delivery",
 	"Delivered"
+]
+
+export const ASTRO_STATUS_OBJECT={
+	PUJARI_ASSIGNED:"Pujari_Assigned",
+	AT_LOCATION:"At_Location",
+	IN_TRANSIT:"In_Transit",
+	COMPLETED:"Completed",
+	CHAT_ROOM_CREATED:"Chat_Room_Created",
+	CHAT_ROOM_UPDATED:"Chat_Room_Updated",
+	CHAT_ROOM_OPEN:"Chat_Room_Open",
+}
+
+export const ASTRO_STATUS=[
+	"Pujari_Assigned",
+	"At_Location",
+	"In_Transit",
+	"Completed",
+	"Chat_Room_Created",
+	"Chat_Room_Updated",
+	"Chat_Room_Open",
 ]
 
 export const EQUIPMENT_HIRING_STATUS = [
