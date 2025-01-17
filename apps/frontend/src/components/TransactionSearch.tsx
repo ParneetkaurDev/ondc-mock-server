@@ -26,6 +26,7 @@ export const TransactionSearch = () => {
 	useEffect(()=>{
 		if(search!=="" || search != undefined){	
 			setTransactionId( search.split("=").pop()||"")
+			fetchTransaction(search.split("=").pop()||"")
 		}
 	},[])
 	
@@ -121,7 +122,7 @@ export const TransactionSearch = () => {
     const value = event.target.value;
     setTransactionId(value); // Update state to reflect input change
     requestTransaction(event); // Debounced API call
-  };
+	};
 
 	const handleFetch = async () => {
 		await fetchTransaction(transactionId);

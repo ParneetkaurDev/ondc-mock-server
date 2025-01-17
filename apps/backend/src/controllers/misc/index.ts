@@ -6,6 +6,7 @@ import { miscSchemaValidator } from "../../lib/schema/misc";
 import { getAllTransactionIdController } from "./getAllTransactionId";
 import { getAllScenarios } from "./getAllScenarios";
 import { proxy } from "./proxy";
+import { getPayload } from "./getPayload";
 
 export const miscRouter = Router();
 
@@ -19,3 +20,4 @@ miscRouter.get("/scan", getAllTransactionIdController);
 miscRouter.get("/analyse/:transactionId", analyseController);
 miscRouter.get("/scenario/:domain/:action", getAllScenarios);
 miscRouter.post("/proxy", proxy)
+miscRouter.post("/get-data",getPayload)

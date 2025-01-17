@@ -11,6 +11,7 @@ import WarningTwoToneIcon from "@mui/icons-material/WarningTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Link, useNavigate } from "react-router-dom";
+
 export const MessageDialog = () => {
 	const { showDialog, closeDialog, message, messageType, copy } = useMessage();
 	const navigate = useNavigate();
@@ -61,11 +62,9 @@ export const MessageDialog = () => {
 				)}
 			</DialogContent>
 			<DialogActions>
-			<Link to={`/analyse?message=${message?.split(" ").pop()}`}>
-			<Button variant="contained" color="secondary" sx={{ fontSize: '0.8rem' }} onClick={handlebuttonclick} >
+			{messageType==="success" && <Button variant="contained" color="secondary" sx={{ fontSize: '0.8rem' }} onClick={handlebuttonclick} >
 					View in Transaction Analyser
-			</Button>
-			</Link>
+			</Button>}
 				<Button variant="contained" color="secondary" onClick={closeDialog}>
 					Close
 				</Button>
