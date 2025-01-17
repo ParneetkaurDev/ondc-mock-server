@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
 	AGRI_EXAMPLES_PATH,
 	AGRI_OUTPUT_EXAMPLES_PATH,
+	quoteCreatorAgriOutput,
 	quoteCreatorHealthCareService,
 	quoteCreatorService,
 	redisFetchToServer,
@@ -74,7 +75,7 @@ export const updateController = async (
 			case "re-negotiate":
 				updaterenogtiateController(req, res, next);
 				break;
-			case "increase-bid-price":
+			case "increase-bids-price":
 				updateincreasebidController(req, res, next);
 				break;
 			default:
@@ -252,7 +253,7 @@ export const updateincreasebidController=(
 	next: NextFunction
 )=>{
 	try{
-	const { context, message, on_confirm } = req.body;
+	const { context, message, on_confirm,providersItems } = req.body;
 	//CREATED COMMON RESPONSE MESSAGE FOR ALL SCENRIO AND UPDATE ACCORDENGLY IN FUNCTIONS
 	const file = fs.readFileSync(
 		path.join(
@@ -264,7 +265,8 @@ export const updateincreasebidController=(
 
 	const responseMessages = {
 		order: {
-			...response.value.message.order
+			...response.value.message.order,
+			quote:quoteCreatorAgriOutput(on_confirm.message.order.items,providersItems)
 		},
 	};
 	// console.log("responseatUpdateBpp", JSON.stringify(responseMessages))

@@ -15,6 +15,7 @@ import {
 	AGRI_EXAMPLES_PATH,
 	AGRI_BPP_MOCKSERVER_URL,
 	AGRI_OUTPUT_EXAMPLES_PATH,
+	quoteCreatorAgriOutput,
 } from "../../../lib/utils";
 import { ERROR_MESSAGES } from "../../../lib/utils/responseMessages";
 import {
@@ -149,7 +150,8 @@ function updaterincreasebidController(message: any, update_target: string) {
 	const responseMessage = {
 		update_target: "items",
 		order: {
-			...response.value.message.order
+			...response.value.message.order,
+			// quote:quoteCreatorAgriOutput()
 		},
 	};
 	return responseMessage;
