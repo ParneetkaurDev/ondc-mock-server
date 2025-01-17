@@ -317,7 +317,7 @@ export const MockRequestSection = () => {
 							variant="solid"
 							onClick={handleSubmit}
 							disabled={
-								logError 
+								logError|| !Action
 								// !action ||
 								// (scenarios!.length > 0 && !activeScenario) ?? false
 							}
