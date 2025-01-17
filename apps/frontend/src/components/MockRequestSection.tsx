@@ -181,10 +181,10 @@ export const MockRequestSection = () => {
 								<Select
 									sx={{
 										height: "10%",
-										width: "107px",
+										width: "22%",
 										marginLeft: "auto",
 										position: "relative",
-										left:"270px"
+										left:"30%"
 									}}
 									placeholder="Select Domain"
 									value={Domain}
@@ -199,10 +199,10 @@ export const MockRequestSection = () => {
 								<Select
 									sx={{
 										height: "10%",
-										width: "107px",
+										width: "20%",
 										marginLeft: "auto",
 										position: "relative",
-										left:"150px"
+										left:"15%"
 									}}
 									placeholder="Select Action"
 									value={Action}
