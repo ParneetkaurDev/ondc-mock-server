@@ -158,7 +158,8 @@ const agriOutputIntializeRequest = async (res: Response,
 			},
 		} = transaction;
 		const { transaction_id } = context;
-		console.log("itmmmmms",JSON.stringify(quote),"payment",JSON.stringify(payments),"fulfillments",JSON.stringify(fulfillments))
+		console.log("====>>>>",JSON.stringify(items))
+		// console.log("itmmmmms",JSON.stringify(quote),"payment",JSON.stringify(payments),"fulfillments",JSON.stringify(fulfillments))
 
 		const timestamp = new Date().toISOString();
 		const quotedata=quoteCreatorAgriOutput(items,providersItems)

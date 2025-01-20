@@ -339,11 +339,7 @@ export const AGRI_OUTPUT_SCENARIOS = {
 		{
 			name: "Increase Bids Price ",
 			scenario: "increase-bids-price",
-		},
-		{
-			name: "Awarded",
-			scenario: "awarded",
-		},
+		}
 	],
 	on_update: [
 		{

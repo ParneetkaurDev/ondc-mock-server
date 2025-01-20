@@ -50,9 +50,9 @@ export const onUpdateSchema={
                       type: "object",
                       properties: {
                         currency: { type: "string" },
-                        maximum_value: { type: "string" }
+                        offered_value: { type: "string" }
                       },
-                      required: ["currency", "maximum_value"]
+                      required: ["currency", "offered_value"]
                     },
                     quantity: {
                       type: "object",
@@ -211,7 +211,7 @@ export const onUpdateSchema={
                     },
                     rateable: { type: "boolean" }
                   },
-                  required: ["id", "state", "stops"]
+                  required: ["id", "state"]
                 }
               }
             },

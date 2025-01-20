@@ -247,7 +247,7 @@ export const confirmAgriOutputController=async (
 		}
 
 		const { fulfillments,billing,cancellation_terms,payments,items} = order;
-		const {quote}=on_init.message.order
+		const {quote}=order
 		console.log("quottee",quote,on_init)
 		const responseMessage = {
 			order: {

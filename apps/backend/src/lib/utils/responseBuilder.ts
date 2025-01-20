@@ -811,7 +811,7 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any,scena
 	});
 	items.forEach((item) => {
 		// console.log("itemsbreakup",item)
-		// console.log("itemmsmsss",item)
+		// console.log("itemmsmsss",item,item?.price?.value,item?.quantity?.selected?.count)
 		breakup = [
 			{
 				title:item.title,
@@ -948,12 +948,12 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any,scena
 			}
 		]
 	})
-	console.log("breakuppp",breakup)
+	// console.log("breakuppp",breakup)
 
 	//MAKE DYNAMIC BREACKUP USING THE DYANMIC ITEMS
 	let totalPrice = 0;
 	breakup.forEach((entry) => {
-		console.log("entryyy",entry)
+		// console.log("entryyy",entry)
 		if(entry.title==="discount"){
 			const priceValue = parseFloat(entry.price.value);
 			if (!isNaN(priceValue)) {
@@ -991,7 +991,7 @@ export const quoteCreatorAgriOutput = (items: Item[], providersItems?: any,scena
 };
 
 export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?: any) => {
-	console.log("itemssssssssssss", items, JSON.stringify(providersItems));
+	// console.log("itemssssssssssss", items, JSON.stringify(providersItems));
 		const providersItem=[providersItems[0].items[0]]
  //get price from on_search
  let breakup: any[] = [];
@@ -1004,7 +1004,7 @@ export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?
 			 (secondItem: { id: string }) => secondItem?.id === item?.id
 		 );
 		 // If a matching item is found, update the price in the items array
-		 console.log("matchhing",matchingItem)
+		//  console.log("matchhing",matchingItem)
 		 if (matchingItem) {
 			 item.title = matchingItem?.descriptor?.name;
 			 // item.price = matchingItem?.price;
@@ -1129,12 +1129,12 @@ export const quoteCreatorNegotiationAgriOutput = (items: Item[], providersItems?
 		 }
 	 ]
  })
- console.log("breakuppp",breakup)
+//  console.log("breakuppp",breakup)
 
  //MAKE DYNAMIC BREACKUP USING THE DYANMIC ITEMS
  let totalPrice = 0;
  breakup.forEach((entry) => {
-	 console.log("entryyy",entry)
+	//  console.log("entryyy",entry)
 	 if(entry.title==="discount"){
 		const priceValue = parseFloat(entry.price.value);
 		if (!isNaN(priceValue)) {

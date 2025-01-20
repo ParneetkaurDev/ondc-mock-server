@@ -130,7 +130,7 @@ function updaterenegotiateController(message: any, update_target: string) {
 	const response = YAML.parse(file.toString());
 
 	const responseMessage = {
-		update_target: "items",
+		update_target: "payments",
 		order: {
 			...response.value.message.order
 		},
