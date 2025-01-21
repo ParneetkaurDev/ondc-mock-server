@@ -62,9 +62,15 @@ const intializeRequest = async (
 		let endDate;
 		if (scenario === "customization") {
 			//getting parent item
-			const parent_obj = providers?.[0]?.items?.find((itm: Item) =>
-				isEmpty(itm.parent_item_id)
-			);
+			const parent_obj = providers?.[0]?.items?.find((itm: Item) =>{
+				// isEmpty(itm.parent_item_id)
+			if(itm.parent_item_id===itm.id){
+				if(isEmpty(itm)){
+					// logger.info("insidee logger")
+				}
+				return itm
+			}
+			});
 			let startTime = parent_obj.time?.schedule?.times?.[0]?.split("T")[1];
 			// console.log("Start Time from parent_item::", startTime);
 
@@ -128,13 +134,18 @@ const intializeRequest = async (
 
 			//get the parent item in customization
 			items = [...providers?.[0].items];
-			const parent_item = items.find((itm: Item) =>
+			const parent_item = items.find((itm: Item) =>{
+				// _.isEmpty(itm.parent_item_id)
+			
 				_.isEmpty(itm.parent_item_id)
-			);
+				if(itm.parent_item_id===itm.id){
+					return itm
+				}
+			});
 
 			// selecting elements based on categories selected
 			items = items.filter((itm: Item) => {
-				if (parent_item.id === itm.id) {
+				if (parent_item?.id === itm.id) {
 					return false;
 				}
 				let flag = 0;
@@ -150,10 +161,10 @@ const intializeRequest = async (
 				return false;
 			});
 
-			const { id: item_id, parent_item_id, location_ids } = parent_item;
+			const { id, parent_item_id, location_ids } = parent_item;
 			items = [
 				{
-					id: item_id,
+					id,
 					parent_item_id,
 					location_ids,
 					quantity: {
