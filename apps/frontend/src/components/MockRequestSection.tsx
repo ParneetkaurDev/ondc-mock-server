@@ -191,7 +191,7 @@ export const MockRequestSection = () => {
 									onChange={handledomain}
 								>
 									{ALL_SUB_DOMAINS[domain as  keyof typeof ALL_SUB_DOMAINS].map((action, index) => (
-										<Option  value={action}  key={action + index}>
+										<Option  value={action} key={action + index}>
 											{action.split(":").pop()}
 										</Option>
 									))}
@@ -209,7 +209,7 @@ export const MockRequestSection = () => {
 									onChange={handleAction}
 								>
 									{All_Actions.map((action, index) => (
-										<Option  value={action} disabled={domain === "logistics" && (action === "Select" || action === "on_Select")}  key={action + index}>
+										<Option  value={action} key={action + index}>
 											{action}
 										</Option>
 									))}
