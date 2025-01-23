@@ -62,15 +62,15 @@ const intializeRequest = async (
 		let endDate;
 		if (scenario === "customization") {
 			//getting parent item
-			const parent_obj = providers?.[0]?.items?.find((itm: Item) =>{
-				// isEmpty(itm.parent_item_id)
-			if(itm.parent_item_id===itm.id){
-				if(isEmpty(itm)){
-					// logger.info("insidee logger")
+			let parent_obj;
+			let providerItems=providers?.[0]?.items
+			console.log("providerItems",providerItems)
+			for(let i=1;i<providerItems.length;i++){
+				if(providerItems[i]?.parent_item_id===providerItems[i-1].id){
+					parent_obj=providerItems[i-1]
 				}
-				return itm
 			}
-			});
+			console.log("parent_obj===>",parent_obj)
 			let startTime = parent_obj.time?.schedule?.times?.[0]?.split("T")[1];
 			// console.log("Start Time from parent_item::", startTime);
 
@@ -134,7 +134,7 @@ const intializeRequest = async (
 
 			//get the parent item in customization
 			items = [...providers?.[0].items];
-			const parent_item = items.find((itm: Item) =>{
+			const parent_item = items.find((itm: Item,index:number) =>{
 				// _.isEmpty(itm.parent_item_id)
 			
 				_.isEmpty(itm.parent_item_id)

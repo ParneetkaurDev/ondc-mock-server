@@ -112,6 +112,7 @@ export const SandboxRequestSection = () => {
 				>
 					<Stack spacing={2} justifyContent="center" alignItems="center">
 						<Typography variant="h5">Sandbox</Typography>
+						<Typography variant="h6" sx={{ fontSize: '0.8rem' }}>If you are a Buyer and want to test Buyer(BAP)</Typography>
 						<Box
 							sx={{
 								width: "100%",
