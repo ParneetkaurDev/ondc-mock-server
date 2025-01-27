@@ -71,9 +71,10 @@ export const useAction = () => {
 			} else {
 				setScenarios([]);
 			}
-
+			console.log("scenarios",scenarios)
 			setLogError(false);
 		} catch (error) {
+			console.log("errror",error)
 			setLogError(true);
 			setAction(undefined);
 		}

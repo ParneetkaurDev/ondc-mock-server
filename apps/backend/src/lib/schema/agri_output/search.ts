@@ -12,7 +12,6 @@ export const searchSchema = {
                 domain: {
                     type: "string",
                     enum: DOMAIN
-
                 },
                 location: {
                     type: "object",
@@ -92,8 +91,7 @@ export const searchSchema = {
                                         type: "object",
                                         properties: {
                                             code: { type: "string" }
-                                        },
-                                        required: ["code"]
+                                        }
                                     },
                                     display: { type: "boolean" },
                                     list: {
@@ -105,24 +103,53 @@ export const searchSchema = {
                                                     type: "object",
                                                     properties: {
                                                         code: { type: "string" }
-                                                    },
-                                                    required: ["code"]
+                                                    }
                                                 },
                                                 value: { type: "string" }
                                             },
-                                            required: [ "value"]
+                                            if: {
+                                                properties: { descriptor: { type: "object" } },
+                                                required: ["descriptor"]
+                                            },
+                                            then: {
+                                                properties: {
+                                                    descriptor: {
+                                                        type: "object",
+                                                        properties: {
+                                                            code: { type: "string" }
+                                                        },
+                                                        required: ["code"]
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
-                                // required: ["descriptor"]
+                                if: {
+                                    properties: { descriptor: { type: "object" } },
+                                    required: ["descriptor"]
+                                },
+                                then: {
+                                    properties: {
+                                        descriptor: {
+                                            type: "object",
+                                            properties: {
+                                                code: { type: "string" }
+                                            },
+                                            required: ["code"]
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
-                    required: [ "payment", "tags"]
+                    required: ["payment", "tags"]
                 }
             },
             required: ["intent"]
         }
     },
     required: ["context", "message"]
-}
+};
+
+

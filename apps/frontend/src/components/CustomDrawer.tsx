@@ -1,7 +1,6 @@
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Grow from "@mui/material/Grow";
-import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -10,8 +9,6 @@ import Toolbar from "@mui/material/Toolbar";
 import useTheme from "@mui/material/styles/useTheme";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -134,7 +131,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 		setEnvironment(event.target.value.toLowerCase());
 	};
 	const drawer = (
-		<div>
+		<div  >
 			<Toolbar />
 			<Divider />
 			<NavButton
@@ -240,8 +237,8 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 	);
 
 	return (
-		<Box sx={{ display: "flex"}} >
-			<AppBar component="nav" sx={{width:"87%"}}>
+		<Box sx={{ display: "flex" }}>
+			<AppBar component="nav" sx={{width:"100vw"}}>
 				<Toolbar>
 					{/* <IconButton
 						color="inherit"
@@ -261,7 +258,7 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<Box component="nav">
+			<Box component="nav" sx={{display:"flex",position:"static"}} > 
 				<Drawer
 					variant="permanent"
 					open={mobileOpen}
@@ -271,29 +268,33 @@ export const CustomDrawer = ({ children }: CustomDrawerProps) => {
 					}}
 					PaperProps={{
 						sx: {
-
-							//  backgroundColor: theme.palette.primary.dark,
+							// backgroundColor:"green",
+							height:"90%",		
+							// backgroundColor: theme.palette.primary.dark,
 							// color: theme.palette.primary.contrastText,
 						},
 					}}
 					sx={{
 						"& .MuiDrawer-paper": {
 							boxSizing: "border-box",
-							width: "13%",
+							width: drawerWidth,
+							height:"95%",
+							position:"static",
+							top:"65px"
 						},
 					}}
 				>
-					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+					{/* <Box sx={{ display: "flex", justifyContent: "flex-end",height:"10%" }}>
 						{/* <IconButton
 							// sx={{ color: theme.palette.primary.contrastText }}
 							onClick={handleDrawerToggle}
 						>
 							<MenuOpenIcon />
-						</IconButton> */}
-					</Box>
-					{drawer}
-				</Drawer>
-			</Box>
+						</IconButton>  */}
+					{/* </Box> */} 
+					{drawer} 
+				</Drawer> 
+			</Box> 
 			<Box
 				component="main"
 				sx={{

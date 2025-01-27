@@ -19,14 +19,13 @@ export const Landing = () => {
 
 	return (
 		<>
-			<BackgroundContainer style={{ position: "fixed", right: 0, width: "90%", height: "100vh",backgroundColor:"red" }}>
+			<BackgroundContainer style={{ position: "fixed", right: 0, width: "90%", height: "100vh" }}>
 				<Container
 					style={{
 						display: "flex",
 						justifyContent: "space-between",
 						alignItems: "center",
 						width:"80%",
-						// backgroundColor: "yellow",
 					}}
 					maxWidth="xl"
 				>
@@ -49,7 +48,6 @@ export const Landing = () => {
 						justifyContent: "flex-start",
 						height: "100%",
 						width:"80%",
-						// backgroundColor: "red",
 					}}
 					maxWidth="xl"
 				>
@@ -79,7 +77,7 @@ export const Landing = () => {
 							</b>
 						</Typography>
 					</InfoPanel>
-					<StyledBox sx={{ height: "80%" }}>
+					<StyledBox  sx={{ height: "80%" }}>
 						<Typography variant="h3" fontSize="50px">
 							Welcome to ONDC Mock/Sandbox
 						</Typography>

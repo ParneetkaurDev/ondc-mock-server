@@ -420,17 +420,13 @@ export const onStatusSchema={
               updated_at: { type: "string" }
             },
             required: [
-              // "id",
-              // "status",
+              
               "provider",
               "items",
               "billing",
               "fulfillments",
               "quote",
-              "payments",
-              // "documents",
-              // "created_at",
-              // "updated_at"
+              "payments"
             ]
           }
         },
