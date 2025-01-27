@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import {
 	AGRI_HEALTHCARE_STATUS,
 	AGRI_HEALTHCARE_STATUS_OBJECT,
+	ASTRO_STATUS,
+	ASTRO_STATUS_OBJECT,
 	BID_AUCTION_STATUS,
 	EQUIPMENT_HIRING_STATUS,
 	FULFILLMENT_LABELS,
@@ -107,6 +109,19 @@ const statusRequest = async (
 						next_status = BID_AUCTION_STATUS[nextStatusIndex];
 					}
 					break;
+				case SERVICES_DOMAINS.ASTRO_SERVICE:
+					lastStatusIndex = ASTRO_STATUS.indexOf(lastStatus);
+					if (lastStatusIndex === 7) {
+						next_status = lastStatus;
+					}
+					if (
+						lastStatusIndex !== -1 &&
+						lastStatusIndex < ASTRO_STATUS.length - 1
+					) {
+						const nextStatusIndex = lastStatusIndex + 1;
+						next_status = ASTRO_STATUS[nextStatusIndex];
+					}
+					break;
 				default: //service started is the default case
 					lastStatusIndex = AGRI_HEALTHCARE_STATUS.indexOf(lastStatus);
 					if (lastStatus === 6) {
@@ -124,7 +139,7 @@ const statusRequest = async (
 		}
 		scenario = scenario ? scenario : next_status;
 
-		const responseMessage: any = {
+		let responseMessage: any = {
 			order: {
 				id: message.order.id,
 				status: ORDER_STATUS.IN_PROGRESS.toUpperCase(),
@@ -280,6 +295,57 @@ const statusRequest = async (
 			case AGRI_HEALTHCARE_STATUS_OBJECT.CANCEL:
 				responseMessage.order.status = "Cancelled";
 				break;
+			case ASTRO_STATUS_OBJECT.PUJARI_ASSIGNED:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.PUJARI_ASSIGNED;
+						fulfillment.stops.forEach((stop: Stop) =>
+							stop?.authorization ? (stop.authorization = undefined) : undefined
+						);
+					}
+				);
+				break;
+			case ASTRO_STATUS_OBJECT.IN_TRANSIT:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.IN_TRANSIT;
+					}
+				);
+				break;
+			case ASTRO_STATUS_OBJECT.AT_LOCATION:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.AT_LOCATION;
+					}
+				);
+				break;
+			case ASTRO_STATUS_OBJECT.CHAT_ROOM_OPEN:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.CHAT_ROOM_OPEN;
+					}
+				);
+				break;
+			case ASTRO_STATUS_OBJECT.CHAT_ROOM_CREATED:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.CHAT_ROOM_CREATED;
+					}
+				);
+				break;
+			case ASTRO_STATUS_OBJECT.CHAT_ROOM_UPDATED:
+				responseMessage.order.fulfillments.forEach(
+					(fulfillment: Fulfillment) => {
+						fulfillment.state.descriptor.code =
+							ASTRO_STATUS_OBJECT.CHAT_ROOM_UPDATED;
+					}
+				);
+				break;
 			default: //service started is the default case
 				break;
 		}
@@ -314,39 +380,61 @@ const statusRequest = async (
 			const updatedate = new Date(message.order.updated_at)
 			updatedate.setSeconds(updatedate.getSeconds() + 10);
 
-			const onStatusPujariAssigned = {
-				...responseMessage, // spread the entire response
-				order: {
-					...responseMessage.order, // spread message to retain its content
-					fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
-						...fulfillment, // spread the fulfillment object
-						state: {
-							...fulfillment.state, // spread state to retain other state details
-							descriptor: {
-								...fulfillment.state.descriptor, // spread descriptor to modify only the code
-								code: "AGENT_ASSIGNED" // modify the code to "created"
+
+			if (on_status) {
+				const lastStatus =
+					on_status?.message?.order?.fulfillments[0]?.state?.descriptor?.code;
+
+				//FIND NEXT STATUS
+				let lastStatusIndex: any = 0;
+
+				return responseBuilder(
+					res,
+					next,
+					req.body.context,
+					responseMessage,
+					`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+						? ON_ACTION_KEY.ON_STATUS
+						: `/${ON_ACTION_KEY.ON_STATUS}`
+					}`,
+					`${ON_ACTION_KEY.ON_STATUS}`,
+					"services"
+				);
+			}
+			else {
+				 responseMessage = {
+					...responseMessage, // spread the entire response
+					order: {
+						...responseMessage.order, // spread message to retain its content
+						fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
+							...fulfillment, // spread the fulfillment object
+							state: {
+								...fulfillment.state, // spread state to retain other state details
+								descriptor: {
+									...fulfillment.state.descriptor, // spread descriptor to modify only the code
+									code: "AGENT_ASSIGNED" // modify the code to "created"
+								}
 							}
-						}
-					})),
-					created_at: createdate.toISOString(),
-					updated_at: updatedate.toISOString()
-
-				}
-			};
-
-			responseBuilder(
-				res,
-				next,
-				req.body.context,
-				onStatusPujariAssigned,
-				`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
-					? ON_ACTION_KEY.ON_STATUS
-					: `/${ON_ACTION_KEY.ON_STATUS}`
-				}`,
-				`${ON_ACTION_KEY.ON_STATUS}`,
-				"services"
-			);
-			astroservice(responseMessage, req, res, message)
+						})),
+						created_at: createdate.toISOString(),
+						updated_at: updatedate.toISOString()
+	
+					}
+				};
+				responseBuilder(
+					res,
+					next,
+					req.body.context,
+					responseMessage,
+					`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/")
+						? ON_ACTION_KEY.ON_STATUS
+						: `/${ON_ACTION_KEY.ON_STATUS}`
+					}`,
+					`${ON_ACTION_KEY.ON_STATUS}`,
+					"services"
+				);
+				astroservice(responseMessage, req, res, message)
+			}
 		}
 		else {
 			console.log("responseMessage", JSON.stringify(responseMessage))
@@ -373,143 +461,123 @@ const statusRequest = async (
 
 export const astroservice = (responseMessage: any, req: Request, res: Response, message: any) => {
 
-	try{
+	try {
 		const createdate = new Date(message.order.created_at)
-	createdate.setSeconds(createdate.getSeconds() + 10);
+		createdate.setSeconds(createdate.getSeconds() + 10);
 
-	const updatedate = new Date(message.order.updated_at)
-	updatedate.setSeconds(updatedate.getSeconds() + 10);
+		const updatedate = new Date(message.order.updated_at)
+		updatedate.setSeconds(updatedate.getSeconds() + 10);
 
-	createdate.setSeconds(createdate.getSeconds() + 20);
-	updatedate.setSeconds(updatedate.getSeconds() + 20);
+		createdate.setSeconds(createdate.getSeconds() + 20);
+		updatedate.setSeconds(updatedate.getSeconds() + 20);
 
-	const onStatusInTransit = {
-		...responseMessage, // spread the entire response
-		order: {
-			...responseMessage.order, // spread message to retain its content
-			fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
-				...fulfillment, // spread the fulfillment object
-				state: {
-					...fulfillment.state, // spread state to retain other state details
-					descriptor: {
-						...fulfillment.state.descriptor, // spread descriptor to modify only the code
-						code: "IN_TRANSIT" // modify the code to "created"
+		const onStatusInTransit = {
+			...responseMessage, // spread the entire response
+			order: {
+				...responseMessage.order, // spread message to retain its content
+				fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
+					...fulfillment, // spread the fulfillment object
+					state: {
+						...fulfillment.state, // spread state to retain other state details
+						descriptor: {
+							...fulfillment.state.descriptor, // spread descriptor to modify only the code
+							code: "IN_TRANSIT" // modify the code to "created"
+						}
 					}
-				}
-			})),
-			created_at: createdate.toISOString(),
-			updated_at: updatedate.toISOString()
-		}
-	}
-
-	createdate.setSeconds(createdate.getSeconds() + 20);
-	updatedate.setSeconds(updatedate.getSeconds() + 20);
-
-	const onStatusAtlocation = {
-		...responseMessage, // spread the entire response
-		order: {
-			...responseMessage.order, // spread message to retain its content
-			fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
-				...fulfillment, // spread the fulfillment object
-				state: {
-					...fulfillment.state, // spread state to retain other state details
-					descriptor: {
-						...fulfillment.state.descriptor, // spread descriptor to modify only the code
-						code: "AT_LOCATION" // modify the code to "created"
-					}
-				}
-			})),
-			created_at: createdate.toISOString(),
-			updated_at: updatedate.toISOString()
+				})),
+				created_at: createdate.toISOString(),
+				updated_at: updatedate.toISOString()
+			}
 		}
 
-	}
+		createdate.setSeconds(createdate.getSeconds() + 20);
+		updatedate.setSeconds(updatedate.getSeconds() + 20);
 
-	createdate.setSeconds(createdate.getSeconds() + 20);
-	updatedate.setSeconds(updatedate.getSeconds() + 20);
-
-	const onStatusCompleted = {
-		...responseMessage, // spread the entire response
-		order: {
-			...responseMessage.order, // spread message to retain its content
-			status:"COMPLETED",
-			fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
-				...fulfillment, // spread the fulfillment object
-				state: {
-					...fulfillment.state, // spread state to retain other state details
-					descriptor: {
-						...fulfillment.state.descriptor, // spread descriptor to modify only the code
-						code: "COMPLETED" // modify the code to "created"
+		const onStatusAtlocation = {
+			...responseMessage, // spread the entire response
+			order: {
+				...responseMessage.order, // spread message to retain its content
+				fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
+					...fulfillment, // spread the fulfillment object
+					state: {
+						...fulfillment.state, // spread state to retain other state details
+						descriptor: {
+							...fulfillment.state.descriptor, // spread descriptor to modify only the code
+							code: "AT_LOCATION" // modify the code to "created"
+						}
 					}
-				}
-			})),
-			created_at: createdate.toISOString(),
-			updated_at: updatedate.toISOString()
+				})),
+				created_at: createdate.toISOString(),
+				updated_at: updatedate.toISOString()
+			}
+
 		}
+
+		createdate.setSeconds(createdate.getSeconds() + 20);
+		updatedate.setSeconds(updatedate.getSeconds() + 20);
+
+		const onStatusCompleted = {
+			...responseMessage, // spread the entire response
+			order: {
+				...responseMessage.order, // spread message to retain its content
+				status: "COMPLETED",
+				fulfillments: responseMessage.order.fulfillments.map((fulfillment: any) => ({
+					...fulfillment, // spread the fulfillment object
+					state: {
+						...fulfillment.state, // spread state to retain other state details
+						descriptor: {
+							...fulfillment.state.descriptor, // spread descriptor to modify only the code
+							code: "COMPLETED" // modify the code to "created"
+						}
+					}
+				})),
+				created_at: createdate.toISOString(),
+				updated_at: updatedate.toISOString()
+			}
+		}
+
+
+		async function callFunctionsSequentially() {
+			await new Promise((resolve) => setTimeout(resolve, 10000));
+			await childOrderResponseBuilder(
+				0,
+				res,
+				req.body.context,
+				onStatusInTransit,
+				`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
+				}`,
+				"on_status"
+			);
+			await new Promise((resolve) => setTimeout(resolve, 10000));
+
+			await childOrderResponseBuilder(
+				0,
+				res,
+				req.body.context,
+				onStatusAtlocation,
+				`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
+				}`,
+				"on_status"
+			);
+			await new Promise((resolve) => setTimeout(resolve, 10000));
+
+			await childOrderResponseBuilder(
+				0,
+				res,
+				req.body.context,
+				onStatusCompleted,
+				`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
+				}`,
+				"on_status"
+			);
+		}
+
+		callFunctionsSequentially();
+
 	}
-
-
-	// let i = 0;
-	// const delays = [10000, 10000, 10000, 10000, 10000, 10000]; // Array of delays in milliseconds for each function
-	// const functions = [
-	// 	onStatusInTransit,
-	// 	onStatusAtlocation,
-	// 	onStatusCompleted,
-	// ];
-
-	async function callFunctionsSequentially() {
-		// for (let index = 0; index < functions.length; index++) {
-
-		
-
-		// 	console.log(`Function ${index} executed`);
-		// 	i++;
-
-		// 	if (index < functions.length - 1) {
-		// 		// Wait for the specified delay before moving to the next function
-		// 		await new Promise((resolve) => setTimeout(resolve, delays[index]));
-		// 	}
-		// }
-		await new Promise((resolve) => setTimeout(resolve, 10000));
-		await childOrderResponseBuilder(
-			0,
-			res,
-			req.body.context,
-			onStatusInTransit,
-			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
-			}`,
-			"on_status"
-		);
-		await new Promise((resolve) => setTimeout(resolve, 10000));
-
-		await childOrderResponseBuilder(
-			0,
-			res,
-			req.body.context,
-			onStatusAtlocation,
-			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
-			}`,
-			"on_status"
-		);
-		await new Promise((resolve) => setTimeout(resolve, 10000));
-
-		await childOrderResponseBuilder(
-			0,
-			res,
-			req.body.context,
-			onStatusCompleted,
-			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
-			}`,
-			"on_status"
-		);
+	catch (err) {
+		next(err)
 	}
-
-	callFunctionsSequentially();
-
-}
-catch(err){
-next(err)
-}
 }
 
 export const childOrderResponseBuilder = async (
