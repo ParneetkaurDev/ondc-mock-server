@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Grow from "@mui/material/Grow";

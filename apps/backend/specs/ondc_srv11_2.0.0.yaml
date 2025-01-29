@@ -758,7 +758,7 @@ paths:
                                 id:
                                   type: string
                                 status:
-                                  const: CREATED
+                                  const: Created
                               required:
                                 - id
                                 - status
@@ -794,10 +794,10 @@ paths:
                                               code:
                                                 type: string
                                                 enum:
-                                                  - PENDING
-                                                  - IN_TRANSIT
-                                                  - AT_LOCATION
-                                                  - COMPLETED
+                                                  - Pending
+                                                  - In_Transit
+                                                  - At_Location
+                                                  - Completed
                                             required:
                                               - code
                                         required:
@@ -1579,9 +1579,9 @@ paths:
                                 status:
                                   type: string
                                   enum:
-                                    - CREATED
-                                    - ACCEPTED
-                                    - IN-PROGRESS
+                                    - Created
+                                    - Accepted
+                                    - In-progress
                               required:
                                 - id
                                 - status
@@ -2485,9 +2485,9 @@ paths:
                                 status:
                                   type: string
                                   enum:
-                                    - CREATED
-                                    - ACCEPTED
-                                    - CANCELLED
+                                    - Created
+                                    - Accepted
+                                    - Cancelled
                               required:
                                 - id
                                 - status
@@ -2742,6 +2742,20 @@ paths:
                           $ref: '#/components/schemas/Order'
                       required:
                         - order
+                      allOf:
+                        - if:
+                            properties:
+                              context:
+                                properties:
+                                  action:
+                                    const: on_status
+                          then:
+                            properties:
+                              message:
+                                properties:
+                                  fulfillment:
+                                    required:
+                                      - tracking
                     error:
                       $ref: '#/components/schemas/Error'
                   required:
@@ -3990,13 +4004,13 @@ components:
             policy
           type: string
           enum:
-            - ACTIVE
-            - COMPLETE
-            - CANCELLED
-            - CREATED
-            - ACCEPTED
-            - IN-PROGRESS
-            - COMPLETED
+            - Active
+            - Complete
+            - Cancelled
+            - Created
+            - Accepted
+            - In-progress
+            - Completed
         type:
           description: >-
             This is used to indicate the type of order being created to BPPs.
