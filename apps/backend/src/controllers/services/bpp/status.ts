@@ -142,7 +142,7 @@ const statusRequest = async (
 		let responseMessage: any = {
 			order: {
 				id: message.order.id,
-				status: ORDER_STATUS.IN_PROGRESS.toUpperCase(),
+				status: ORDER_STATUS.IN_PROGRESS,
 				provider: {
 					...message.order.provider,
 					rateable: undefined,
@@ -187,6 +187,7 @@ const statusRequest = async (
 							return demoObj;
 						}),
 						rateable: undefined,
+						tracking:false
 					})
 				),
 				quote: message.order.quote,
@@ -437,7 +438,7 @@ const statusRequest = async (
 			}
 		}
 		else {
-			console.log("responseMessage", JSON.stringify(responseMessage))
+			// console.log("responseMessage", JSON.stringify(responseMessage))
 
 			return responseBuilder(
 				res,

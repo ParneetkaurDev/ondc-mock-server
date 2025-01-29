@@ -21,7 +21,6 @@ import axios, { AxiosError } from "axios";
 import { UserGuide } from "./UserGuideSection";
 import { VITE_SERVER_URL } from "../utils/env";
 import { Fab } from "@mui/material";
-import { VERSION } from "lodash";
 
 // type MockRequestSectionProp = {
 // 	domain: string;
@@ -108,6 +107,7 @@ export const MockRequestSection = () => {
 		| React.KeyboardEvent<Element>
 		| React.FocusEvent<Element>
 		| null,
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	value: {} | null) => {
 		console.log("action", event);
 		setAction(value as string); // Ensure value is a string and set the version

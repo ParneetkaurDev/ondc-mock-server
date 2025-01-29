@@ -13,8 +13,8 @@ export const SRV_PAYMENT_TYPE = [
 ];
 
 export const SRV_FULFILLMENT_STATE = [
-	"IN_TRANSIT",
-	"AT_LOCATION",
+	"In_Transit",
+	"At_Location",
 	"COLLECTED_BY_AGENT",
 	"RECEIVED_AT_LAB",
 	"TEST_COMPLETED",
@@ -27,12 +27,12 @@ export const SRV_FULFILLMENT_STATE = [
 ];
 
 export const SRV_ORDER_STATE = [
-	"CREATED",
-	"ACCEPTED",
-	"IN-PROGRESS",
-	"COMPLETED",
-	"CANCELLED",
-	"PENDING",
+	"Created",
+	"Accepted",
+	"In-progress",
+	"Completed",
+	"Cancelled",
+	"Pending",
 ];
 
 export const GPS_PATTERN =
