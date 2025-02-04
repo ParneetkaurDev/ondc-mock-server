@@ -61,6 +61,7 @@ export const SandboxRequestSection = () => {
 			| React.KeyboardEvent<Element>
 			| React.FocusEvent<Element>
 			| null,
+		// eslint-disable-next-line @typescript-eslint/ban-types
 		value: {} | null
 	) => {
 		console.log("event", event);

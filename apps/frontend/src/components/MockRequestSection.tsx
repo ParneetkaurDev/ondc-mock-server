@@ -103,15 +103,13 @@ export const MockRequestSection = () => {
 		}
 	};
 
-	const handleAction = (
-		event:
-			| React.MouseEvent<Element>
-			| React.KeyboardEvent<Element>
-			| React.FocusEvent<Element>
-			| null,
-		// eslint-disable-next-line @typescript-eslint/ban-types
-		value: {} | null
-	) => {
+	const handleAction = (event:
+		| React.MouseEvent<Element>
+		| React.KeyboardEvent<Element>
+		| React.FocusEvent<Element>
+		| null,
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	value: {} | null) => {
 		console.log("action", event);
 		setAction(value as string); // Ensure value is a string and set the version
 	};

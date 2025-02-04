@@ -11,7 +11,6 @@ import WarningTwoToneIcon from "@mui/icons-material/WarningTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {  useNavigate } from "react-router-dom";
-// import { useEffect } from "react";
 export const MessageDialog = () => {
 	const { showDialog, closeDialog, message, messageType, copy } = useMessage();
 	const navigate = useNavigate();
