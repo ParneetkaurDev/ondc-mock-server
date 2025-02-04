@@ -11,6 +11,7 @@ import WarningTwoToneIcon from "@mui/icons-material/WarningTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {  useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
 export const MessageDialog = () => {
 	const { showDialog, closeDialog, message, messageType, copy } = useMessage();
 	const navigate = useNavigate();
@@ -21,10 +22,27 @@ export const MessageDialog = () => {
 			});
 	};
 
+	// useEffect(() => {
+  //   if (showDialog && messageType === "success" ) {
+  //     if (!sessionStorage.getItem("tId")) {
+  //       const transactionMessage = message?.split(" ").pop();
+  //       sessionStorage.setItem("tId", transactionMessage || "");
+  //     }
+	// 		else{
+	// 			if(message?.split(" ").pop()!=="Successfully!" ){
+	// 				const transactionMessage = message?.split(" ").pop();
+  //         sessionStorage.setItem("tId", transactionMessage || "");
+	// 			}
+	// 		}
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [showDialog]);
+
 	const handlebuttonclick=()=>{
 		closeDialog(); // Close the dialog
     const transactionMessage = message?.split(" ").pop();
-    navigate(`/analyse?message=${transactionMessage}`);
+    // navigate(`/analyse?message=${transactionMessage}`);
+		navigate(`/analyse?message=${sessionStorage.getItem("tId")||transactionMessage}`);
 	}
 
 	return (
@@ -61,9 +79,9 @@ export const MessageDialog = () => {
 				)}
 			</DialogContent>
 			<DialogActions>
-			<Button variant="contained" color="secondary" sx={{ fontSize: '0.8rem' }} onClick={handlebuttonclick} >
+			{messageType==="success"    &&<Button variant="contained" color="secondary" sx={{ fontSize: '0.8rem' }} onClick={handlebuttonclick} >
 					View in Transaction Analyser
-			</Button>
+			</Button>}
 				<Button variant="contained" color="secondary" onClick={closeDialog}>
 					Close
 				</Button>
