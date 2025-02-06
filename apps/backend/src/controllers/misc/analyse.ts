@@ -19,7 +19,7 @@ export const analyseController = async (req: Request, res: Response) => {
 			},
 		});
 	const transactionKeys = await redis.keys(`${transactionId}-*`);
-
+		console.log("transactionKeys",transactionKeys)
 	if (transactionKeys.length === 0) return res.json([]);
 
 	if (
@@ -49,6 +49,7 @@ export const analyseController = async (req: Request, res: Response) => {
 				);
 				if (!each) return null;
 				var parsed = JSON.parse(each);
+				console.log("parsed action",(parsed.request as any).context.action,parsed)
 				return {
 					...parsed,
 					id: _key ? _key[1] : "0",
@@ -75,7 +76,7 @@ export const analyseController = async (req: Request, res: Response) => {
 			for (const action in grouped) {
 				
 			  const group = grouped[action];
-			  if (action === 'on_status'||'init'||'on_init') {
+			  if (action === 'on_status') {
 				// Keep all sorted objects for on_status
 				const withResponse = group.filter((obj:any) => obj.response);
 				prioritized.push(...withResponse);

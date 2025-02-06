@@ -261,6 +261,7 @@ export const responseBuilder = async (
 			transaction_id: (reqContext as any).transaction_id,
 			message: { sync: { message: { ack: { status: "ACK" } } } },
 		});
+		console.log("at Response_builder")
 		return res.json({
 			sync: {
 				message: {

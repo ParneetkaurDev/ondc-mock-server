@@ -19,7 +19,7 @@ async function send_response(
   scenario: any = "",
   version: any = "",
   bpp_uri: string = "", // for search
-  env:string="",
+  env: string = "",
   id: number = 0
 ) {
   let time_now = new Date().toISOString()
@@ -79,11 +79,14 @@ async function send_response(
     } else {
       uri = `${bpp_uri}/${action}${scenario ? `?scenario=${scenario}` : ""}`;
     }
-    
+
     try {
+    console.log("action",action)
       const response = await axios.post(uri, res_obj, {
-        headers: { ...headers ,"environment":env},
+        headers: { ...headers, "environment": env },
       });
+      console.log("response at send_response",JSON.stringify(response))
+
       await redis.set(
         `${transaction_id}-${action}-from-server-${id}-${time_now}`,
         JSON.stringify({
@@ -94,6 +97,7 @@ async function send_response(
           },
         })
       );
+      
     } catch (err: any) {
       if (err instanceof AxiosError) {
         res.status(err.response?.status || 500).json(err.response?.data || "")
@@ -101,7 +105,7 @@ async function send_response(
       }
       throw err
     }
-
+    console.log("at SendResponse")
     return res.status(200).json({
       message: {
         ack: {
