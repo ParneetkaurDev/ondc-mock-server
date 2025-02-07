@@ -196,12 +196,12 @@ export const responseBuilder = async (
 						authorization: header,
 					},
 				});
-
+				// console.log("response at response builder",response.data)
 				log.response = {
 					timestamp: new Date().toISOString(),
 					response: response.data,
 				};
-
+				// console.log(`Storing redis ${action} from Server in Response Builder`)
 				await redis.set(
 					`${
 						(async.context! as any).transaction_id
@@ -261,6 +261,7 @@ export const responseBuilder = async (
 			transaction_id: (reqContext as any).transaction_id,
 			message: { sync: { message: { ack: { status: "ACK" } } } },
 		});
+		console.log("at ResponseBuilder ")
 		return res.json({
 			sync: {
 				message: {
@@ -2102,6 +2103,7 @@ export const quoteSubscription = (
 
 export const quoteCommon = (tempItems: Item[], providersItems?: any) => {
 	const items: Item[] = JSON.parse(JSON.stringify(tempItems));
+	providersItems=ensureArray(providersItems)
 	//get price from on_search
 	items.forEach((item) => {
 		// Find the corresponding item in the second array
@@ -2147,7 +2149,7 @@ export const quoteCommon = (tempItems: Item[], providersItems?: any) => {
 			price: {
 				currency: "INR",
 				value: (
-					Number(item.price.value) * item.quantity.selected.count
+					Number(item?.price?.value) * item.quantity.selected.count
 				).toString(),
 			},
 			tags: item.tags,
@@ -2486,7 +2488,6 @@ rangeEnd.setHours(rangeEnd.getHours() + 3);
 			}
 		}
 		if(domain==="astroService"){
-			console.log("herrrr")
 			fulfillmentObj={
 				id:fulfillments[0].id || "FY1",
 				type:"Seller-Fulfilled",
@@ -2751,6 +2752,16 @@ rangeEnd.setHours(rangeEnd.getHours() + 3);
 						],
 						rateable: undefined,
 					  };
+					} else if(domain===SERVICES_DOMAINS.HEALTHCARE_SERVICES){
+						return {
+							...fulfillment,
+							state: {
+								...fulfillment.state,
+								descriptor: {
+								code: FULFILLMENT_STATES.CANCELLED,
+								}
+							}
+						}
 					}
 				  
 					// Default return if no conditions are met

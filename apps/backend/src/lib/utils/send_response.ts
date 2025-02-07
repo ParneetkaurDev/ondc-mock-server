@@ -62,14 +62,14 @@ async function send_response(
 
     let uri: any;
 
-    try {
-      if(bpp_uri.endsWith("/")){
-        bpp_uri=bpp_uri.substring(0,bpp_uri.length-1)
-        console.log("==>",bpp_uri)
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   if(bpp_uri.endsWith("/")){
+    //     bpp_uri=bpp_uri.substring(0,bpp_uri.length-1)
+    //     console.log("==>",bpp_uri)
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    // }
 
     if (scenario && version) {
       uri = `${bpp_uri}/${action}${scenario ? `?scenario=${scenario}` : ""}${version ? `&version=${version}` : ""
@@ -81,6 +81,7 @@ async function send_response(
     }
     
     try {
+
       const response = await axios.post(uri, res_obj, {
         headers: { ...headers ,"environment":env},
       });
@@ -101,7 +102,7 @@ async function send_response(
       }
       throw err
     }
-
+    console.log("at SendResponse")
     return res.status(200).json({
       message: {
         ack: {
