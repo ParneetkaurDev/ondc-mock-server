@@ -535,7 +535,7 @@ paths:
                                           - list
                                     required:
                                       - id
-                                      - parent_item_id
+                                      # - parent_item_id
                                       - fulfillment_ids
                               required:
                                 - items
@@ -898,7 +898,7 @@ paths:
                                                       - location
                                                       - time
                                                       - contact
-                                                      - person
+                                                      # - person
                                                   - properties:
                                                       location:
                                                         required:
@@ -1581,9 +1581,6 @@ paths:
                                     - CREATED
                                     - ACCEPTED
                                     - IN-PROGRESS
-                              required:
-                                - id
-                                - status
                     - $ref: '#/paths/~1init/post/requestBody/content/application~1json/schema/allOf/1/allOf/1'
                     #- $ref: '#/paths/~1init/post/requestBody/content/application~1json/schema/allOf/1/allOf/2' 
                     - $ref: '#/paths/~1confirm/post/requestBody/content/application~1json/schema/allOf/1/allOf/5'
@@ -2520,7 +2517,7 @@ paths:
                                                       - location
                                                       - time
                                                       - contact
-                                                      - person
+                                                      # - person
                                                 - if:
                                                     properties:
                                                         type:
@@ -2531,7 +2528,7 @@ paths:
                                                       - location
                                                       - time
                                                       - contact
-                                                      - person
+                                                      # - person
                                                 - contains:
                                                     properties:
                                                       type:
@@ -2739,8 +2736,8 @@ paths:
                       properties:
                         order:
                           $ref: '#/components/schemas/Order'
-                      required:
-                        - order
+                      # required:
+                      #   - order
                       allOf:
                         - if:
                             properties:
@@ -2839,6 +2836,27 @@ paths:
                                                 if:
                                                   type:
                                                     const: end
+                                                then:
+                                                  time:
+                                                    properties:
+                                                    required:
+                                                      - timestamp
+                                      - if:
+                                          state:
+                                            properties:
+                                              descriptor:
+                                                properties:
+                                                  code:
+                                                    const: In-Transit
+                                        then:
+                                          stops:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                if:
+                                                  type:
+                                                    const: start
                                                 then:
                                                   time:
                                                     properties:

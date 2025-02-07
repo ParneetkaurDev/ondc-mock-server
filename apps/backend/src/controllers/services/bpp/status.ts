@@ -629,48 +629,49 @@ export const childOrderResponseBuilder = async (
 				// 	},
 				// }
 			);
+			console.log("🚀 ~ response:", response.data)
 
-			log.response = {
-				timestamp: new Date().toISOString(),
-				response: response.data,
-			};
+			// log.response = {
+			// 	timestamp: new Date().toISOString(),
+			// 	response: response.data,
+			// };
 
 			await redis.set(
 				`${(async.context! as any).transaction_id}-${action}-from-server-${id}-${ts.toISOString()}`, // saving ID with on_status child process (duplicate keys are not allowed)
 				JSON.stringify(log)
 			);
 		} catch (error) {
-			const response =
-				error instanceof AxiosError
-					? error?.response?.data
-					: {
-						message: {
-							ack: {
-								status: "NACK",
-							},
-						},
-						error: {
-							message: error,
-						},
-					};
-			log.response = {
-				timestamp: new Date().toISOString(),
-				response: response,
-			};
+			// const response =
+			// 	error instanceof AxiosError
+			// 		? error?.response?.data
+			// 		: {
+			// 			message: {
+			// 				ack: {
+			// 					status: "NACK",
+			// 				},
+			// 			},
+			// 			error: {
+			// 				message: error,
+			// 			},
+			// 		};
+			// log.response = {
+			// 	timestamp: new Date().toISOString(),
+			// 	response: response,
+			// };
 			await redis.set(
 				`${(async.context! as any).transaction_id}-${action}-from-server-${id}-${ts.toISOString()}`,
 				JSON.stringify(log)
 			);
 
-			if (error instanceof AxiosError && id === 0 && action === "on_status") {
-				res.status(error.status || 500).json(error);
-			}
+			// if (error instanceof AxiosError && id === 0 && action === "on_status") {
+			// 	res.status(error.status || 500).json(error);
+			// }
 
 			if (error instanceof AxiosError) {
 				console.log(error.response?.data);
 			}
 
-			throw error;
+			// throw error;
 		}
 
 		logger.info({
