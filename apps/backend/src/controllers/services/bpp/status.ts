@@ -631,10 +631,10 @@ export const childOrderResponseBuilder = async (
 			);
 			console.log("🚀 ~ response:", response.data)
 
-			// log.response = {
-			// 	timestamp: new Date().toISOString(),
-			// 	response: response.data,
-			// };
+			log.response = {
+				timestamp: new Date().toISOString(),
+				response: response.data,
+			};
 
 			await redis.set(
 				`${(async.context! as any).transaction_id}-${action}-from-server-${id}-${ts.toISOString()}`, // saving ID with on_status child process (duplicate keys are not allowed)
@@ -654,10 +654,8 @@ export const childOrderResponseBuilder = async (
 			// 				message: error,
 			// 			},
 			// 		};
-			// log.response = {
-			// 	timestamp: new Date().toISOString(),
-			// 	response: response,
-			// };
+			// 
+			
 			await redis.set(
 				`${(async.context! as any).transaction_id}-${action}-from-server-${id}-${ts.toISOString()}`,
 				JSON.stringify(log)
@@ -667,9 +665,9 @@ export const childOrderResponseBuilder = async (
 			// 	res.status(error.status || 500).json(error);
 			// }
 
-			if (error instanceof AxiosError) {
-				console.log(error.response?.data);
-			}
+			// if (error instanceof AxiosError) {
+			// 	console.log(error.response?.data);
+			// }
 
 			// throw error;
 		}
