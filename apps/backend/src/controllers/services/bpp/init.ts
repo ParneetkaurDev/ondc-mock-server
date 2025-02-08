@@ -718,7 +718,7 @@ const initSellercollected=(req: Request,
 						"",
 						fulfillments[0]?.type
 				  );
-		console.log("quoteeeeeee", JSON.stringify(quoteData.price.value))
+		console.log("quoteeeeeee", JSON.stringify(quoteData))
 		const responseMessage = {
 			order: {
 				provider: {...remainingProvider,
@@ -731,7 +731,7 @@ const initSellercollected=(req: Request,
 				//UPDATE PAYMENT OBJECT WITH REFUNDABLE SECURITY
 
 				payments: [
-					{...response?.value?.message?.order?.payments[0],url:"https://payment-gateway-url/payment-link"},
+					{...response?.value?.message?.order?.payments[0],url:"https://payment-gateway-url/payment-link",collected_by:"BPP"},
 					{
 						id:
 							domain === SERVICES_DOMAINS.AGRI_EQUIPMENT
@@ -819,14 +819,23 @@ const initSellercollected=(req: Request,
 		}
 
 
-		return childOrderResponseBuilder(
-			0,
-			res,
-			context,
-			on_status,
-			`${req.body.context.bap_uri}${req.body.context.bap_uri.endsWith("/") ? "on_status" : "/on_status"
-			}`,
-			"on_status")}
+
+return	childOrderResponseBuilder(
+					0,
+					res,
+					context,
+					on_status,
+					`${req.body.context.bap_uri}${
+						req.body.context.bap_uri.endsWith("/")
+							? "on_status"
+							: "/on_status"
+					}`,
+					"on_status"
+				);
+			
+		
+		
+		}
 
 			catch(error){
 				console.log(error)
