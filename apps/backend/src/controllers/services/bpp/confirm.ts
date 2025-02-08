@@ -146,7 +146,7 @@ export const confirmServiceCustomizationController = (
     const responseMessage = {
       order: {
         ...order,
-        status: "Accepted",
+        status: (context.domain===SERVICES_DOMAINS.SERVICES)?ORDER_STATUS.ACCEPTED.toUpperCase():ORDER_STATUS.ACCEPTED,
         provider: {
           ...order?.provider,
           rateable: true,
@@ -157,7 +157,7 @@ export const confirmServiceCustomizationController = (
             // state hard coded
             state: {
               descriptor: {
-                code: "PENDING",
+                code: "Pending",
               },
             },
             rateable: true,

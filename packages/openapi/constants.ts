@@ -360,6 +360,10 @@ export const SERVICES_SCENARIOS = {
 			name: "Service",
 			scenario: "service",
 		},
+		{
+			name:"Service Seller Collected",
+			scenario:"sellercollected"
+		}
 	],
 	// confirm: [
 	// 	{
