@@ -36,7 +36,7 @@ export const l2Validator = (domain: string) => async (req: Request, res: Respons
 
 
   isValid = validate(req.body);
-  // console.log('isValid::::: ', isValid)
+  console.log('isValid::::: ', isValid)
   if (!isValid) {
     console.log("error json schema",action,validate.errors?.map(
       ({ message, params, instancePath }) => ({
