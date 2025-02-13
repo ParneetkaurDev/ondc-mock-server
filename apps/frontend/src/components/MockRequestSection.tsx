@@ -68,7 +68,6 @@ export const MockRequestSection = () => {
 		const fetchData = async () => {
 			const data = await call();
 			if (data.data) {
-
 				setLog(JSON.stringify(data.data));
 				detectAction(JSON.stringify(data.data), version);
 			}
@@ -108,7 +107,6 @@ export const MockRequestSection = () => {
 	const handledomain = (
 		value: {} | null
 	) => {
-		console.log("domain value",value)
 		setDomain(value as string); // Ensure value is a string and set the version
 	};
 
