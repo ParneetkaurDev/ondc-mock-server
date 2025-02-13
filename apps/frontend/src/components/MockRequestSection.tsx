@@ -49,26 +49,33 @@ export const MockRequestSection = () => {
 	}, [domain]);
 
 	async function call() {
-		const response = await axios.get(`${VITE_SERVER_URL}/get-data`, {
-			params: {
-				action: Action.toLowerCase(),
-				domain: domain,
-				subdomain: Domain,
-				version: version,
-			},
-		});
-		return response;
-	}
+    try {
+        const response = await axios.get(`${VITE_SERVER_URL}/get-data`, {
+            timeout: 30000, // 30 sec timeout
+            params: {
+                action: Action.toLowerCase(),
+                domain: domain,
+                subdomain: Domain,
+                version: version,
+            },
+        });
+        return response.data; // Return only data
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
 	// console.log(domain,"Domainnn")
 	useEffect(() => {
 		console.log("ACTION CHANGED:", Action);
 
 		const fetchData = async () => {
 			const data = await call();
-			if (data.data.data) {
+			console.log("Response from backend:", data.data);
+			if (data.data) {
 				console.log("Response from backend:", data);
-				setLog(JSON.stringify(data.data.data));
-				detectAction(JSON.stringify(data.data.data), version);
+				setLog(JSON.stringify(data.data));
+				detectAction(JSON.stringify(data.data), version);
 			}
 		};
 
@@ -97,7 +104,6 @@ export const MockRequestSection = () => {
 			| null,
 		value: {} | null
 	) => {
-		console.log("event", event);
 		if (value) {
 			setVersion(value as string); // Ensure value is a string and set the version
 		}
@@ -110,7 +116,6 @@ export const MockRequestSection = () => {
 		| null,
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	value: {} | null) => {
-		console.log("action", event);
 		setAction(value as string); // Ensure value is a string and set the version
 	};
 
@@ -122,12 +127,10 @@ export const MockRequestSection = () => {
 			| null,
 		value: {} | null
 	) => {
-		console.log("action", event);
 		setDomain(value as string); // Ensure value is a string and set the version
 	};
 
 	const handleLogChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		console.log("insidelog", e.target.value);
 		setLog(e.target.value);
 		detectAction(e.target.value, version);
 	};
